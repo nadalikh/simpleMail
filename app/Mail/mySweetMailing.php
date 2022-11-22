@@ -41,8 +41,8 @@ class mySweetMailing extends Mailable
     public function envelope()
     {
         return new Envelope(
-            from: new Address("idealist619@gmail.com", "Nadali Khalili"),
-            subject: 'Veryficatino code'
+//            from: new Address("idealist619@gmail.com", "Nadali Khalili"),
+            subject: 'Verification code'
         );
     }
 

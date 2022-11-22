@@ -7,8 +7,15 @@ use Illuminate\Support\Facades\Mail;
 
 class mailController extends Controller
 {
-    public function index(){
-        $mail = new mySweetMailing();
-        Mail::to("nadalikh@gmail.com")->send($mail);
+    public function sendVerificationCode(Request $req){
+        $req->validate([
+            'email' => 'email|max:30|min:10'
+        ]);
+        Mail::to($req->email)->send(new mySweetMailing());
     }
+
+//    public function checkVerificaitonCode(){
+//
+//    }
+
 }
