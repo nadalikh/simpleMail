@@ -2,6 +2,7 @@
 
 namespace App\Mail;
 
+use App\Models\mySweetMail;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
@@ -9,6 +10,7 @@ use Illuminate\Mail\Mailables\Address;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
+use function PHPUnit\Framework\isNull;
 
 class mySweetMailing extends Mailable
 {
@@ -26,11 +28,28 @@ class mySweetMailing extends Mailable
      * @return void
      * @throws \Exception
      */
-    public function __construct()
+    public function __construct($email)
     {
         //I just generate the code in constructor
         //This might throw an exception by using random_int that should not be handled.
         $this->code = random_int(10000, 99999);
+
+        $mySweetMain = mySweetMail::whereEmail($email)->first();
+        //check for the existed email
+        if(is_null($mySweetMain)){
+            //create new one
+            $mySweetMain = new mySweetMail();
+            $mySweetMain->email = $email;
+            $mySweetMain->verification_code = $this->code;
+            $mySweetMain->save();
+        }else{
+            //update the code
+            $mySweetMain->verification_code = $this->code;
+            $mySweetMain->update();
+        }
+
+
+
     }
 
     /**

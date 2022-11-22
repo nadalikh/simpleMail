@@ -16,4 +16,5 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
-    Route::post('mail', [\App\Http\Controllers\mailController::class, 'sendVerificationCode']);
+Route::post('sendMail', [\App\Http\Controllers\mailController::class, 'sendVerificationCode']);
+Route::post("checkVerificationCode", [\App\Http\Controllers\mailController::class, 'checkVerificaitonCode']);

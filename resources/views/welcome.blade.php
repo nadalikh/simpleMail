@@ -12,17 +12,18 @@
     <title>Simple mail</title>
 </head>
 <body>
-@if(!isset($sent))
+@if(! \Illuminate\Support\Facades\Session::has('sent'))
     <form class="form-control d-block w-50 m-auto mt-3" method="post" action="{{action([\App\Http\Controllers\mailController::class, "sendVerificationCode"])}}">
         @csrf
         <input class="form-control mb-3" type="email" placeholder="test@test.com" name="email">
         <input class="form-control mb-3" type="submit" value="send verification code">
     </form>
 @endif
-@if(isset($sent))
+@if(\Illuminate\Support\Facades\Session::has('sent'))
     <form class="form-control d-block w-50 m-auto mt-3" method="post" action="{{action([\App\Http\Controllers\mailController::class, "checkVerificaitonCode"])}}">
         @csrf
-        <input class="form-control mb-3" type="text" placeholder="*****" name="email">
+        <input class="form-control mb-3" type="hidden" name="email" value="{{\Illuminate\Support\Facades\Session::get('sent')}}">
+        <input class="form-control mb-3" type="text" placeholder="*****" name="verification_code">
         <input class="form-control mb-3" type="submit" value="check verification code">
     </form>
 @endif
@@ -34,6 +35,11 @@
                 <li>{{ $error }}</li>
             @endforeach
         </ul>
+    </div>
+@endif
+@if(\Illuminate\Support\Facades\Session::has('success'))
+    <div class="alert alert-success">
+        <p>{{\Illuminate\Support\Facades\Session::get('success')}}</p>
     </div>
 @endif
 </body>
