@@ -10,20 +10,41 @@ use Illuminate\Support\Facades\Validator;
 
 class mailController extends Controller
 {
+    /**
+     * @var string[] is used for email rules validation
+     */
     private $emailRules = [
         'email' => 'email|max:30|min:10'
     ];
+
+    /**
+     * @var string[] is used for email message validation
+     */
     private $emailMessages = [
         'email.email' => "Email has wrong format",
         'email.max' => 'Email should has maximum 30 characters',
         'email.min' => 'Email should has min 10 characters'
     ];
+
+    /**
+     * @var string[] is used for verification code rules validation
+     */
     private $codeRules = [
         'verification_code' => "digits:5"
     ];
+
+    /**
+     * @var string[] is used for verificatin code message validation
+     */
     private $codeMessages = [
         'verification_code.digits' => "The verification code should consist of only 5 digits",
     ];
+
+    /**
+     * @param Request $req
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     * @throws \Exception
+     */
     public function sendVerificationCode(Request $req){
         $validator = Validator::make($req->toArray(), $this->emailRules, $this->emailMessages);
         if($validator->fails())
@@ -32,6 +53,10 @@ class mailController extends Controller
         return redirect('/')->with('sent', $req->email);
     }
 
+    /**
+     * @param Request $req
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     */
     public function checkVerificaitonCode(Request $req){
         $validator = Validator::make($req->toArray(), $this->codeRules, $this->codeMessages);
         if($validator->fails())
